@@ -1,0 +1,160 @@
+/* ========== 全体リセット ========== */
+* {
+    margin: 0;                  /* 全要素の外側余白をなくす */
+    padding: 0;                 /* 全要素の内側余白をなくす */
+    box-sizing: border-box;     /* paddingとborderを幅に含める */
+}
+
+/* ========== ページ全体の設定 ========== */
+body{
+    display: flex;              /* Flexboxを有効化 */
+    justify-content: center;    /* 左右の中央指定 */
+    align-items: center;        /* 上下の中央指定 */
+    height: 100vh;              /* 画面全体の高さ（100vh = 画面の100%） */
+    background: linear-gradient(to bottom, #0a0a2e, #0e0e2d); /* 上から下へのグラデーション（夜空） */
+    overflow: hidden;           /* はみ出した要素を非表示にする */
+}
+
+/* ========== タイトル文字のスタイル ========== */
+h1{
+    font-size: 5rem;            /* 文字サイズ（5rem = 80px相当） */
+    font-weight: bold;          /* 太字 */
+    color: #ffe76f;             /* ゴールドカラー */
+    text-shadow: 0 0 10px #ffd700, 0 0 20px #ff8c00, 0 0 30px #ff6600; /* 光るエフェクト（3層のグロー） */
+    z-index: 10;                /* 花火より前面に表示（数字が大きいほど前） */
+    display: flex;              /* Flexboxを有効化（文字を横並びに） */
+}
+
+/* ========== 各文字（span）のアニメーション設定 ========== */
+h1 span {
+    opacity: 0;                                 /* 最初は透明（見えない） */
+    animation: fadeInUp 0.5s forwards;          /* fadeInUpアニメーションを0.5秒で実行、終了後の状態を維持 */
+    animation-delay: calc(0.1s * var(--i));     /* --iの値 × 0.1秒だけ遅延（1文字目は0.1秒後、2文字目は0.2秒後...） */
+}
+
+/* ========== 文字が下から現れるアニメーション ========== */
+@keyframes fadeInUp {
+    0% {                                        /* アニメーション開始時 */
+        opacity: 0;                             /* 透明 */
+        transform: translateY(50px) scale(0.5); /* 50px下に配置、半分のサイズ */
+    }
+    100% {                                      /* アニメーション終了時 */
+        opacity: 1;                             /* 不透明（見える） */
+        transform: translateY(0) scale(1);      /* 元の位置、元のサイズ */
+    }
+}
+
+/* ========== 花火のコンテナ（入れ物） ========== */
+.fireworks {
+    position: fixed;            /* 画面に固定（スクロールしても動かない） */
+    top: 0;                     /* 上端に配置 */
+    left: 0;                    /* 左端に配置 */
+    width: 100%;                /* 幅100% */
+    height: 100%;               /* 高さ100% */
+    pointer-events: none;       /* クリックを透過（下の要素をクリックできる） */
+    z-index: 1;                 /* 背景より前、文字より後ろに表示 */
+}
+
+/* ========== 各花火の基本スタイル ========== */
+.firework {
+    position: absolute;         /* 自由に配置できるようにする */
+    width: 10px;                /* 花火の玉の幅 */
+    height: 10px;               /* 花火の玉の高さ */
+    border-radius: 50%;         /* 円形にする */
+    opacity: 0;                 /* 最初は非表示 */
+}
+
+/* 花火の装飾用（before/after疑似要素） */
+.firework::before,
+.firework::after {
+    content: '';                /* 空の要素を作成 */
+    position: absolute;         /* 絶対配置 */
+    width: 100%;                /* 親要素と同じ幅 */
+    height: 100%;               /* 親要素と同じ高さ */
+    border-radius: 50%;         /* 円形 */
+}
+
+/* ========== 花火1つ目（コーラルピンク） ========== */
+/* 文字アニメーション後（約2.5秒後）に花火開始 */
+.firework:nth-child(1) {
+    left: 20%;                  /* 左から20%の位置 */
+    top: 30%;                   /* 上から30%の位置（爆発する高さ） */
+    animation: launch 1.2s ease-out 2.5s forwards; /* 2.5秒後に1.2秒かけて打ち上げ */
+    background: #ff6b6b;        /* コーラルピンク */
+    color: #ff6b6b;             /* 爆発の粒の色（currentColorで使用） */
+    box-shadow: 0 0 30px #ffc8c8, 0 0 60px #ffbcbc; /* 光るエフェクト */
+}
+
+/* ========== 花火2つ目（ゴールドイエロー） ========== */
+.firework:nth-child(2) {
+    left: 80%;                  /* 左から80%の位置 */
+    top: 25%;                   /* 上から25%の位置 */
+    animation: launch 1.2s ease-out 3s forwards;   /* 3秒後に開始 */
+    background: #ffd93d;        /* ゴールドイエロー */
+    color: #ffd93d;             /* 爆発の粒の色 */
+    box-shadow: 0 0 30px #ffd93d, 0 0 60px #ffd93d;
+}
+
+/* ========== 花火3つ目（ライムグリーン） ========== */
+.firework:nth-child(3) {
+    left: 50%;                  /* 中央 */
+    top: 15%;                   /* 上の方で爆発 */
+    animation: launch 1.2s ease-out 3.5s forwards; /* 3.5秒後に開始 */
+    background: #6bff6b;        /* ライムグリーン */
+    color: #6bff6b;             /* 爆発の粒の色 */
+    box-shadow: 0 0 30px #6bff6b, 0 0 60px #6bff6b;
+}
+
+/* ========== 花火4つ目（ピンク） ========== */
+.firework:nth-child(4) {
+    left: 30%;                  /* 左から30%の位置 */
+    top: 20%;                   /* 上から20%の位置 */
+    animation: launch 1.2s ease-out 4s forwards;   /* 4秒後に開始 */
+    background: #ff6bff;        /* ピンク */
+    color: #ff6bff;             /* 爆発の粒の色 */
+    box-shadow: 0 0 30px #ff6bff, 0 0 60px #ff6bff;
+}
+
+/* ========== 花火5つ目（シアン） ========== */
+.firework:nth-child(5) {
+    left: 70%;                  /* 左から70%の位置 */
+    top: 35%;                   /* 上から35%の位置 */
+    animation: launch 1.2s ease-out 4.5s forwards; /* 4.5秒後に開始 */
+    background: #6bffff;        /* シアン */
+    color: #6bffff;             /* 爆発の粒の色 */
+    box-shadow: 0 0 30px #6bffff, 0 0 60px #6bffff;
+}
+
+/* ========== 花火の打ち上げ＆爆発アニメーション ========== */
+@keyframes launch {
+    0% {                                        /* 開始：画面下から */
+        transform: translateY(100vh) scale(1);  /* 画面の高さ分下に配置 */
+        opacity: 1;                             /* 見える状態 */
+    }
+    60% {                                       /* 60%時点：目標位置に到達 */
+        opacity: 1;                             /* まだ見える */
+        transform: translateY(0) scale(1);      /* 元の位置（topで指定した位置） */
+    }
+    100% {                                      /* 終了：爆発 */
+        transform: translateY(0) scale(1);
+        opacity: 0;                             /* 中心は消える */
+        box-shadow:                             /* 放射状に光の粒が広がる（爆発表現） */
+            60px -60px 0 currentColor,          /* 右上 */
+            -60px -60px 0 currentColor,         /* 左上 */
+            60px 60px 0 currentColor,           /* 右下 */
+            -60px 60px 0 currentColor,          /* 左下 */
+            85px 0 0 currentColor,              /* 右 */
+            -85px 0 0 currentColor,             /* 左 */
+            0 85px 0 currentColor,              /* 下 */
+            0 -85px 0 currentColor,             /* 上 */
+            42px -73px 0 currentColor,          /* 斜め（8方向の間） */
+            -42px -73px 0 currentColor,
+            42px 73px 0 currentColor,
+            -42px 73px 0 currentColor,
+            73px -42px 0 currentColor,
+            -73px -42px 0 currentColor,
+            73px 42px 0 currentColor,
+            -73px 42px 0 currentColor;
+    }
+}
+
