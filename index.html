@@ -32,5 +32,52 @@
         <span style="--i:13">a</span>
         <span style="--i:14">r</span>
     </h1>
+
+    <!-- おみくじセクション -->
+    <div class="omikuji-container">
+        <button class="omikuji-button" onclick="drawOmikuji()">おみくじを引く</button>
+        <div class="omikuji-result" id="omikujiResult"></div>
+    </div>
+
+    <script>
+        let hasDrawn = false; // おみくじを引いたかどうかのフラグ
+        
+        function drawOmikuji() {
+            if (hasDrawn) return; // 既に引いている場合は何もしない
+            hasDrawn = true; // フラグを立てる
+            
+            const fortunes = [
+                { result: '大吉', color: '#ff6b6b', message: '最高の運勢！素晴らしい一年になります！' },
+                { result: '吉', color: '#ffd93d', message: '良い運勢！幸運が訪れます！' },
+                { result: '中吉', color: '#6bff6b', message: 'まずまずの運勢！努力が実ります！' },
+                { result: '小吉', color: '#6bffff', message: '小さな幸せが続きます！' },
+                { result: '末吉', color: '#ff6bff', message: '今後運気が上昇します！' },
+                { result: '凶', color: '#aaaaaa', message: '気をつけて過ごしましょう' },
+                { result: '大凶', color: '#666666', message: '慎重に行動しましょう' }
+            ];
+            
+            const resultElement = document.getElementById('omikujiResult');
+            const buttonElement = document.querySelector('.omikuji-button');
+            
+            // ボタンを無効化
+            buttonElement.disabled = true;
+            buttonElement.style.opacity = '0.5';
+            buttonElement.style.cursor = 'not-allowed';
+            
+            // アニメーション効果
+            resultElement.style.opacity = '0';
+            resultElement.style.transform = 'scale(0.5)';
+            
+            setTimeout(() => {
+                const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+                resultElement.innerHTML = `
+                    <div class="fortune-text" style="color: ${fortune.color}">${fortune.result}</div>
+                    <div class="fortune-message">${fortune.message}</div>
+                `;
+                resultElement.style.opacity = '1';
+                resultElement.style.transform = 'scale(1)';
+            }, 300);
+        }
+    </script>
 </body>
 </html>
